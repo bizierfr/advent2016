@@ -1,0 +1,62 @@
+<html>
+
+<pre style="word-wrap: break-word; white-space: pre-wrap;">R4, R3, L3, L2, L1, R1, L1, R2, R3, L5, L5, R4, L4, R2, R4, L3, R3, L3, R3, R4, R2, L1, R2, L3, L2, L1, R3, R5, L1, L4, R2, L4, R3, R1, R2, L5, R2, L189, R5, L5, R52, R3, L1, R4, R5, R1, R4, L1, L3, R2, L2, L3, R4, R3, L2, L5, R4, R5, L2, R2, L1, L3, R3, L4, R4, R5, L1, L1, R3, L5, L2, R76, R2, R2, L1, L3, R189, L3, L4, L1, L3, R5, R4, L1, R1, L1, L1, R2, L4, R2, L5, L5, L5, R2, L4, L5, R4, R4, R5, L5, R3, L1, L3, L1, L1, L3, L4, R5, L3, R5, R3, R3, L5, L5, R3, R4, L3, R3, R1, R3, R2, R2, L1, R1, L3, L3, L3, L1, R2, L1, R4, R4, L1, L1, R3, R3, R4, R1, L5, L2, R2, R3, R2, L3, R4, L5, R1, R4, R5, R4, L4, R1, L3, R1, R3, L2, L3, R1, L2, R3, L3, L1, L3, R4, L4, L5, R3, R5, R4, R1, L2, R3, R5, L5, L4, L1, L1
+</pre>
+
+<script src="jquery-1.10.2.min.js"></script>
+
+<script>
+	$(function(){
+		data = $("pre").html().split(", ");
+		console.log(data);
+
+		current = {};
+		current["Y"] = 0
+		current["X"] = 0
+		current["going"] = "N"
+
+		console.log(current);
+
+		//pos to change, operation, next going
+		solutions = {};
+		solutions["NR"] = "X+E";
+		solutions["NL"] = "X-W";
+		solutions["ER"] = "Y-S";
+		solutions["EL"] = "Y+N";
+		solutions["WR"] = "Y+N";
+		solutions["WL"] = "Y-S";
+		solutions["SR"] = "X-W";
+		solutions["SL"] = "X+E";
+
+		steps = [];
+		locations = [];
+
+		QG_index = 0;
+
+		$.each(data, function(index, step){
+			key = current["going"] + step[0];
+			solution = solutions[key];
+			current[solution[0]] += parseInt(solution[1] + step.substring(1, step.length));
+			current["going"] = solution[2]
+
+			if (steps.indexOf(step) > -1 && QG_index==0){
+				QG_index = steps.indexOf(step);
+				console.log("set QG at index =" + QG_index);
+			}
+			steps.push(step);
+			locations.push({"X":current["X"], "Y":current["Y"]});
+		});
+
+		console.log("QG");
+		console.log(locations[QG_index]);
+
+		console.log(current);
+		answer1 = Math.abs(current["X"]) + Math.abs(current["Y"]);
+		console.log("1.1 = " + answer1);
+
+		answer2 = Math.abs(locations[QG_index]["X"]) + Math.abs(locations[QG_index]["Y"]);
+		console.log("1.2 = " + answer2);
+	});
+</script>
+
+</html>
